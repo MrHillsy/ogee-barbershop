@@ -6,16 +6,20 @@
     <title>Ogee Barbershop - Premium Barbershop</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
-        
-        .gradient-bg {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-        }
+        /* Use Helvetica where available, with sane fallbacks */
+        body { font-family: "Helvetica Neue", Helvetica, Arial, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Liberation Sans', sans-serif; }
+        /* Small animation utilities */
+        .reveal { opacity: 0; transform: translateY(12px) scale(0.995); transition: opacity 550ms var(--tw-easing, cubic-bezier(.2,.8,.2,1)), transform 550ms var(--tw-easing, cubic-bezier(.2,.8,.2,1)); }
+        .reveal-visible { opacity: 1; transform: translateY(0) scale(1); }
+        .pop-in { animation: popIn 400ms cubic-bezier(.2,.8,.2,1) both; }
+        @keyframes popIn { from { transform: scale(.98); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        /* Lightbox overlay */
+        .lightbox-overlay { background: rgba(2,6,23,0.7); backdrop-filter: blur(4px); }
+        /* Slide down for mobile menu */
+        .menu-slide-down { animation: slideDown 320ms cubic-bezier(.2,.8,.2,1) both; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-6px) } to { opacity: 1; transform: translateY(0) } }
     </style>
+   
 </head>
 <body class="bg-white text-slate-900">
     <!-- Navigation -->
@@ -31,7 +35,7 @@
             <button onclick="scrollToBooking()" class="hidden md:block px-6 py-2.5 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition text-sm">
                 Book Now
             </button>
-            <button id="mobileMenuBtn" class="md:hidden text-slate-600" onclick="toggleMenu()">
+            <button id="mobileMenuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Toggle menu" class="md:hidden text-slate-600" onclick="toggleMenu()">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
@@ -39,7 +43,7 @@
         </div>
         
         <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-slate-200">
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-slate-200" role="menu" aria-hidden="true">
             <ul class="flex flex-col">
                 <li><a href="#home" onclick="toggleMenu()" class="block px-6 py-4 text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition border-b border-slate-100">Home</a></li>
                 <li><a href="#services" onclick="toggleMenu()" class="block px-6 py-4 text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition border-b border-slate-100">Services</a></li>
@@ -54,7 +58,7 @@
     <section id="home" class="pt-24 pb-12 md:pt-32 md:pb-20 px-4 sm:px-6">
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="order-2 lg:order-1">
+                <div class="order-2 lg:order-1 reveal">
                     <div class="inline-block px-4 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium mb-6">
                         Lagos Premier Barbershop
                     </div>
@@ -64,7 +68,7 @@
                     <p class="text-lg text-slate-600 mb-8 leading-relaxed">
                         Experience precision cutting, expert fades, and personalized grooming services that elevate your look and confidence.
                     </p>
-                    <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex flex-col sm:flex-row gap-4 reveal">
                         <button onclick="scrollToBooking()" class="px-8 py-4 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition shadow-lg shadow-emerald-600/30">
                             Book Appointment
                         </button>
@@ -74,11 +78,11 @@
                     </div>
                     <div class="mt-12 grid grid-cols-3 gap-8">
                         <div>
-                            <div class="text-3xl font-bold text-emerald-600">500+</div>
+                            <div class="text-3xl font-bold text-emerald-600"><span class="stat" data-target="500">0</span>+</div>
                             <div class="text-sm text-slate-600">Happy Clients</div>
                         </div>
                         <div>
-                            <div class="text-3xl font-bold text-emerald-600">5+</div>
+                            <div class="text-3xl font-bold text-emerald-600"><span class="stat" data-target="5">0</span>+</div>
                             <div class="text-sm text-slate-600">Years Experience</div>
                         </div>
                         <div>
@@ -87,12 +91,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="order-1 lg:order-2">
+                <div class="order-1 lg:order-2 reveal">
                     <div class="relative">
                         <div class="aspect-square rounded-3xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white shadow-2xl">
                             <div class="text-center">
-                                <div class="text-8xl mb-4">💈</div>
-                                <div class="text-2xl font-bold">Your Photo Here</div>
+                                
+                                <div class="text-2xl font-bold"><img src="og.jpg" alt="Ogee" class="rounded-3xl"></div>
                             </div>
                         </div>
                         <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-white rounded-2xl shadow-xl flex items-center justify-center">
@@ -118,9 +122,9 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- The Ogee Fade -->
-                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer">
+                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal">
                     <div class="w-14 h-14 bg-emerald-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-600 transition">
-                        <span class="text-2xl group-hover:scale-110 transition">✂️</span>
+                        <img src="assets/ogee_fade.jpg" alt="The Ogee Fade" class="w-6 h-6 object-contain transition group-hover:scale-110" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">The Ogee Fade</h3>
                     <p class="text-slate-600 mb-4 text-sm leading-relaxed">My signature cut. Clean fade with precision line-up and optional design.</p>
@@ -131,9 +135,9 @@
                 </div>
 
                 <!-- Burst Fade Mohawk -->
-                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer">
+                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal">
                     <div class="w-14 h-14 bg-emerald-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-600 transition">
-                        <span class="text-2xl group-hover:scale-110 transition">🔥</span>
+                        <img src="assets/mohawk.jpg" alt="Burst Fade Mohawk" class="w-6 h-6 object-contain transition group-hover:scale-110" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Burst Fade Mohawk</h3>
                     <p class="text-slate-600 mb-4 text-sm leading-relaxed">Trending street style. Bold burst fade with a sharp mohawk.</p>
@@ -144,9 +148,9 @@
                 </div>
 
                 <!-- Twist Sponge Top -->
-                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer">
+                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal">
                     <div class="w-14 h-14 bg-emerald-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-600 transition">
-                        <span class="text-2xl group-hover:scale-110 transition">🌀</span>
+                        <img src="assets/twists.jpg" alt="Twist Sponge / High Top" class="w-6 h-6 object-contain transition group-hover:scale-110" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Twist Sponge / High Top</h3>
                     <p class="text-slate-600 mb-4 text-sm leading-relaxed">Classic afro-textured style with clean sides and defined shape.</p>
@@ -157,9 +161,9 @@
                 </div>
 
                 <!-- Shadow Fade -->
-                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer">
+                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal">
                     <div class="w-14 h-14 bg-emerald-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-600 transition">
-                        <span class="text-2xl group-hover:scale-110 transition">🌊</span>
+                        <img src="assets/waves.jpg" alt="Shadow Fade with Waves" class="w-6 h-6 object-contain transition group-hover:scale-110" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Shadow Fade with Waves</h3>
                     <p class="text-slate-600 mb-4 text-sm leading-relaxed">Smooth blend perfection that enhances your wave pattern.</p>
@@ -170,9 +174,9 @@
                 </div>
 
                 <!-- Low Taper -->
-                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer">
+                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal">
                     <div class="w-14 h-14 bg-emerald-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-600 transition">
-                        <span class="text-2xl group-hover:scale-110 transition">💼</span>
+                        <img src="assets/taper.jpg" alt="Low Taper Curly Look" class="w-6 h-6 object-contain transition group-hover:scale-110" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Low Taper Curly Look</h3>
                     <p class="text-slate-600 mb-4 text-sm leading-relaxed">Professional and stylish with natural-looking curls.</p>
@@ -183,9 +187,9 @@
                 </div>
 
                 <!-- Dread Retouch -->
-                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer">
+                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal">
                     <div class="w-14 h-14 bg-emerald-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-600 transition">
-                        <span class="text-2xl group-hover:scale-110 transition">🎯</span>
+                        <img src="assets/dreads.jpg" alt="Dread Retouch" class="w-6 h-6 object-contain transition group-hover:scale-110" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Dread Retouch + Fade</h3>
                     <p class="text-slate-600 mb-4 text-sm leading-relaxed">Expert retouch with clean fade to keep your locs sharp.</p>
@@ -196,9 +200,9 @@
                 </div>
 
                 <!-- Beard Grooming -->
-                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer md:col-span-2 lg:col-span-1">
+                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer md:col-span-2 lg:col-span-1 reveal">
                     <div class="w-14 h-14 bg-emerald-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-600 transition">
-                        <span class="text-2xl group-hover:scale-110 transition">🎨</span>
+                        <img src="assets/beard.jpg" alt="Beard Art & Shaping" class="w-6 h-6 object-contain transition group-hover:scale-110" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Beard Art & Shaping</h3>
                     <p class="text-slate-600 mb-4 text-sm leading-relaxed">Precision sculpting, line-ups, and artistic facial hair designs.</p>
@@ -230,7 +234,7 @@
                 <div id="quizContainer">
                     <div id="question" class="text-xl md:text-2xl font-semibold text-slate-900 mb-8 text-center">What's your vibe?</div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <button onclick="showQuizResult('professional')" class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group">
+                        <button onclick="showQuizResult('professional')" class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group quiz-btn reveal">
                             <div class="flex items-center gap-4">
                                 <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center group-hover:bg-emerald-600 transition">
                                     <span class="text-2xl">💼</span>
@@ -241,7 +245,7 @@
                                 </div>
                             </div>
                         </button>
-                        <button onclick="showQuizResult('street')" class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group">
+                        <button onclick="showQuizResult('street')" class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group quiz-btn reveal">
                             <div class="flex items-center gap-4">
                                 <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center group-hover:bg-emerald-600 transition">
                                     <span class="text-2xl">🔥</span>
@@ -252,7 +256,7 @@
                                 </div>
                             </div>
                         </button>
-                        <button onclick="showQuizResult('natural')" class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group">
+                        <button onclick="showQuizResult('natural')" class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group quiz-btn reveal">
                             <div class="flex items-center gap-4">
                                 <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center group-hover:bg-emerald-600 transition">
                                     <span class="text-2xl">🌀</span>
@@ -263,7 +267,7 @@
                                 </div>
                             </div>
                         </button>
-                        <button onclick="showQuizResult('creative')" class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group">
+                        <button onclick="showQuizResult('creative')" class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group quiz-btn reveal">
                             <div class="flex items-center gap-4">
                                 <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center group-hover:bg-emerald-600 transition">
                                     <span class="text-2xl">🎨</span>
@@ -304,7 +308,7 @@
             </div>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200">
+                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer" data-img="og.jpg" data-caption="Our work" tabindex="0">
                     <div class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
                         <div class="text-center">
                             <div class="text-6xl mb-2">📸</div>
@@ -312,7 +316,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200">
+                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer" data-img="og.jpg" data-caption="Our work" tabindex="0">
                     <div class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
                         <div class="text-center">
                             <div class="text-6xl mb-2">📸</div>
@@ -320,7 +324,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200">
+                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer" data-img="og.jpg" data-caption="Our work" tabindex="0">
                     <div class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
                         <div class="text-center">
                             <div class="text-6xl mb-2">📸</div>
@@ -328,7 +332,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200">
+                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer" data-img="og.jpg" data-caption="Our work" tabindex="0">
                     <div class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
                         <div class="text-center">
                             <div class="text-6xl mb-2">📸</div>
@@ -336,7 +340,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200">
+                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer" data-img="og.jpg" data-caption="Our work" tabindex="0">
                     <div class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
                         <div class="text-center">
                             <div class="text-6xl mb-2">📸</div>
@@ -344,7 +348,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200">
+                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer" data-img="og.jpg" data-caption="Our work" tabindex="0">
                     <div class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
                         <div class="text-center">
                             <div class="text-6xl mb-2">📸</div>
@@ -577,17 +581,34 @@
         </div>
     </footer>
 
+    <!-- Lightbox / Image Modal -->
+    <div id="lightbox" class="fixed inset-0 hidden items-center justify-center z-50" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="absolute inset-0 lightbox-overlay" data-close></div>
+        <div class="relative max-w-3xl mx-auto p-4">
+            <button id="lightboxClose" aria-label="Close image" class="absolute -top-2 -right-2 bg-white rounded-full p-2 shadow-lg">✕</button>
+            <img id="lightboxImg" src="" alt="" class="rounded-xl max-h-[80vh] w-auto block mx-auto" />
+            <div id="lightboxCaption" class="text-center text-white mt-4"></div>
+        </div>
+    </div>
+
     <script>
-        // Mobile Menu Toggle
+        // Mobile Menu Toggle (with ARIA)
         function toggleMenu() {
             const mobileMenu = document.getElementById('mobileMenu');
             const menuBtn = document.getElementById('mobileMenuBtn');
-            
-            if (mobileMenu.classList.contains('hidden')) {
+            const isHidden = mobileMenu.classList.contains('hidden');
+
+            if (isHidden) {
                 mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('menu-slide-down');
+                mobileMenu.setAttribute('aria-hidden', 'false');
+                menuBtn.setAttribute('aria-expanded', 'true');
                 menuBtn.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
             } else {
                 mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('menu-slide-down');
+                mobileMenu.setAttribute('aria-hidden', 'true');
+                menuBtn.setAttribute('aria-expanded', 'false');
                 menuBtn.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
             }
         }
@@ -604,15 +625,21 @@
             } else {
                 result = 'The Ogee Fade with Design - My signature cut with custom artwork!';
             }
-            
+
             document.getElementById('quizContainer').classList.add('hidden');
-            document.getElementById('quizResult').classList.remove('hidden');
+            const resultEl = document.getElementById('quizResult');
+            resultEl.classList.remove('hidden');
+            resultEl.classList.add('pop-in');
             document.getElementById('resultText').textContent = result;
+            // Move focus for accessibility
+            resultEl.querySelector('button')?.focus();
         }
         
         function resetQuiz() {
             document.getElementById('quizContainer').classList.remove('hidden');
-            document.getElementById('quizResult').classList.add('hidden');
+            const resultEl = document.getElementById('quizResult');
+            resultEl.classList.add('hidden');
+            resultEl.classList.remove('pop-in');
         }
 
         // Scroll to booking
@@ -633,6 +660,98 @@
                 }
             });
         });
+
+        // IntersectionObserver for reveal animations and stat counters
+        (function () {
+            const revealObserver = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal-visible');
+
+                        // Animate any child stat elements when parent revealed
+                        const stats = entry.target.querySelectorAll('.stat');
+                        stats.forEach(stat => animateStat(stat));
+
+                        // If element shouldn't animate again, unobserve it
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12 });
+
+            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+            // Stat count animation
+            function animateStat(el) {
+                if (!el || el.dataset.animated) return;
+                const target = Number(el.dataset.target || 0);
+                if (!target) return;
+                el.dataset.animated = 'true';
+                const duration = 900;
+                const start = performance.now();
+                const from = 0;
+                const frame = (now) => {
+                    const progress = Math.min((now - start) / duration, 1);
+                    const value = Math.floor(from + (target - from) * progress);
+                    el.textContent = value.toString();
+                    if (progress < 1) requestAnimationFrame(frame);
+                };
+                requestAnimationFrame(frame);
+            }
+        })();
+
+        // Gallery Lightbox
+        (function () {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+            const lightboxCaption = document.getElementById('lightboxCaption');
+            const lightboxClose = document.getElementById('lightboxClose');
+
+            function openLightbox(src, caption) {
+                lightboxImg.src = src || '';
+                lightboxImg.alt = caption || 'Image';
+                lightboxCaption.textContent = caption || '';
+                lightbox.classList.remove('hidden');
+                lightbox.classList.add('flex');
+                lightbox.setAttribute('aria-hidden', 'false');
+                lightboxClose.focus();
+            }
+
+            function closeLightbox() {
+                lightbox.classList.remove('flex');
+                lightbox.classList.add('hidden');
+                lightbox.setAttribute('aria-hidden', 'true');
+                lightboxImg.src = '';
+            }
+
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                item.addEventListener('click', () => openLightbox(item.dataset.img, item.dataset.caption));
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openLightbox(item.dataset.img, item.dataset.caption);
+                    }
+                });
+            });
+
+            // Close handlers
+            lightbox.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeLightbox));
+            lightboxClose.addEventListener('click', closeLightbox);
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeLightbox();
+            });
+        })();
+
+        // Quiz keyboard accessibility
+        (function () {
+            document.querySelectorAll('.quiz-btn').forEach(btn => {
+                btn.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        btn.click();
+                    }
+                });
+            });
+        })();
     </script>
 </body>
 </html>
