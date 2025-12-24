@@ -7,14 +7,18 @@
     <title>Ogee Barbershop - Premium Barbershop</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Prevent horizontal scroll on all devices */
+        html {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
         /* Use Helvetica where available, with sane fallbacks */
         body {
             font-family: "Helvetica Neue", Helvetica, Arial, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Liberation Sans', sans-serif;
             overflow-x: hidden;
-        }
-
-        body {
             width: 100%;
+            max-width: 100vw;
         }
 
         /* Mobile margins for better spacing */
@@ -404,6 +408,18 @@
             animation: slideInRight 0.6s cubic-bezier(.2, .8, .2, 1) both;
         }
 
+        /* Prevent any element from causing horizontal scroll */
+        * {
+            box-sizing: border-box;
+        }
+
+        .max-w-7xl,
+        .max-w-4xl,
+        section,
+        div {
+            max-width: 100%;
+        }
+
         /* Smooth Transitions for All Interactive Elements */
         button,
         a,
@@ -420,14 +436,24 @@
     <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="text-2xl font-bold text-emerald-600">Ogee Barbershop</div>
-            <ul class="hidden md:flex gap-8 text-sm font-medium">
+            <ul class="hidden md:flex gap-8 text-sm font-medium items-center">
                 <li><a href="#home" class="text-slate-600 hover:text-emerald-600 transition">Home</a></li>
                 <li><a href="#services" class="text-slate-600 hover:text-emerald-600 transition">Services</a></li>
                 <li><a href="#gallery" class="text-slate-600 hover:text-emerald-600 transition">Gallery</a></li>
                 <li><a href="#about" class="text-slate-600 hover:text-emerald-600 transition">About</a></li>
+                <li>
+                    <a href="https://instagram.com/ogee_barbershop" target="_blank" rel="noopener noreferrer"
+                        class="text-slate-600 hover:text-emerald-600 transition flex items-center gap-1"
+                        title="Follow us on Instagram">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                    </a>
+                </li>
             </ul>
             <button onclick="scrollToBooking()"
-                class="hidden md:block px-6 py-2.5 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition text-sm">
+                class="hidden md:block px-6 py-2.5 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition text-sm magnetic-btn">
                 Book Now
             </button>
             <button id="mobileMenuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Toggle menu"
@@ -454,6 +480,16 @@
                 <li><a href="#about" onclick="toggleMenu()"
                         class="block px-6 py-4 text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition border-b border-slate-100">About</a>
                 </li>
+                <li>
+                    <a href="https://instagram.com/ogee_barbershop" target="_blank" rel="noopener noreferrer"
+                        class="block px-6 py-4 text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition border-b border-slate-100 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                        Instagram
+                    </a>
+                </li>
                 <li><a href="#booking" onclick="toggleMenu()"
                         class="block px-6 py-4 text-emerald-600 font-semibold hover:bg-slate-50 transition">Book Now</a>
                 </li>
@@ -470,10 +506,10 @@
                         class="inline-block px-4 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium mb-6 pulse-badge">
                         Lagos Premier Barbershop
                     </div>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                         <span class="gradient-text">Where Fresh Cuts Meet Modern Style</span>
                     </h1>
-                    <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                    <p class="text-base sm:text-lg text-slate-600 mb-8 leading-relaxed">
                         Experience precision cutting, expert fades, and personalized grooming services that elevate your
                         look and confidence.
                     </p>
@@ -506,17 +542,19 @@
                 </div>
                 <div class="order-1 lg:order-2 reveal">
                     <div class="relative">
-                        <div
-                            class="aspect-square rounded-3xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white shadow-2xl">
-                            <div class="text-center">
-
-                                <div class="text-2xl font-bold"><img src="og.jpg" alt="Ogee" class="rounded-3xl"></div>
-                            </div>
+                        <div class="aspect-square rounded-3xl overflow-hidden shadow-2xl bg-slate-900">
+                            <!-- 7-second looping video -->
+                            <video autoplay loop muted playsinline class="w-full h-full object-cover" poster="og.jpg">
+                                <source src="assets/hero-video.mp4" type="video/mp4">
+                                <source src="assets/hero-video.webm" type="video/webm">
+                                <!-- Fallback image if video doesn't load -->
+                                <img src="og.jpg" alt="Ogee Barbershop" class="w-full h-full object-cover">
+                            </video>
                         </div>
                         <div
                             class="absolute -bottom-6 -right-6 w-32 h-32 bg-white rounded-2xl shadow-xl flex items-center justify-center">
                             <div class="text-center">
-                                <div class="text-emerald-600 font-bold text-xl">Open</div>
+                                <div class="text-emerald-600 font-bold text-xl" id="shopStatus">Open</div>
                                 <div class="text-slate-600 text-xs">Mon-Sat</div>
                                 <div class="text-slate-600 text-xs">9AM-8PM</div>
                             </div>
@@ -663,8 +701,8 @@
     <section class="py-16 px-4 sm:px-6">
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-12">
-                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Find Your Perfect Style</h2>
-                <p class="text-lg text-slate-600">Not sure which cut suits you? Take our quick quiz!</p>
+                <h2 class="text-2xl sm:text-4xl font-bold text-slate-900 mb-4">Find Your Perfect Style</h2>
+                <p class="text-sm sm:text-lg text-slate-600">Not sure which cut suits you? Take our quick quiz!</p>
             </div>
 
             <div class="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-slate-200 transition-all duration-300"
@@ -876,8 +914,8 @@
     <section id="gallery" class="py-16 px-4 sm:px-6 bg-slate-50">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-12">
-                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Our Work</h2>
-                <p class="text-lg text-slate-600">Before & after transformations</p>
+                <h2 class="text-2xl sm:text-4xl font-bold text-slate-900 mb-4">Our Work</h2>
+                <p class="text-sm sm:text-lg text-slate-600">Before & after transformations</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1017,8 +1055,8 @@
     <section id="booking" class="py-16 px-4 sm:px-6 bg-slate-50">
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-12">
-                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Book Your Appointment</h2>
-                <p class="text-lg text-slate-600">Quick and easy booking via WhatsApp</p>
+                <h2 class="text-2xl sm:text-4xl font-bold text-slate-900 mb-4">Book Your Appointment</h2>
+                <p class="text-sm sm:text-lg text-slate-600">Quick and easy booking via WhatsApp</p>
             </div>
 
             <div class="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-slate-200">
@@ -1082,29 +1120,81 @@
                 </div>
 
                 <div class="mt-8 pt-8 border-t border-slate-200">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-center sm:text-left">
+                    <!-- Google Maps and Hours Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Google Maps -->
                         <div>
-                            <div class="flex items-center justify-center sm:justify-start gap-2 text-slate-600 mb-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex items-center gap-2 text-slate-900 mb-4">
+                                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
                                     </path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 </svg>
-                                <span class="font-medium">Location</span>
+                                <span class="font-semibold text-lg">Find Us</span>
                             </div>
-                            <p class="text-slate-900">Location, Lagos </p>
+                            <p class="text-slate-600 mb-3">123 Barbing Street, Lekki Phase 1, Lagos</p>
+                            <!-- Google Maps Embed - Replace with actual location -->
+                            <div class="rounded-xl overflow-hidden shadow-lg border border-slate-200 hover-lift">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.7276489534447!2d3.4205!3d6.4474!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMjYnNTAuNiJOIDPCsDI1JzEzLjgiRQ!5e0!3m2!1sen!2sng!4v1234567890"
+                                    width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade" class="w-full">
+                                </iframe>
+                            </div>
                         </div>
+
+                        <!-- Opening Hours Calendar -->
                         <div>
-                            <div class="flex items-center justify-center sm:justify-start gap-2 text-slate-600 mb-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex items-center gap-2 text-slate-900 mb-4">
+                                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                <span class="font-medium">Hours</span>
+                                <span class="font-semibold text-lg">Opening Hours</span>
+                                <span id="liveStatus"
+                                    class="ml-auto px-3 py-1 rounded-full text-xs font-semibold"></span>
                             </div>
-                            <p class="text-slate-900">Mon-Sat: 9:00 AM - 8:00 PM</p>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-slate-50 transition"
+                                    data-day="monday">
+                                    <span class="font-medium text-slate-700">Monday</span>
+                                    <span class="text-slate-600">9:00 AM - 8:00 PM</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-slate-50 transition"
+                                    data-day="tuesday">
+                                    <span class="font-medium text-slate-700">Tuesday</span>
+                                    <span class="text-slate-600">9:00 AM - 8:00 PM</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-slate-50 transition"
+                                    data-day="wednesday">
+                                    <span class="font-medium text-slate-700">Wednesday</span>
+                                    <span class="text-slate-600">9:00 AM - 8:00 PM</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-slate-50 transition"
+                                    data-day="thursday">
+                                    <span class="font-medium text-slate-700">Thursday</span>
+                                    <span class="text-slate-600">9:00 AM - 8:00 PM</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-slate-50 transition"
+                                    data-day="friday">
+                                    <span class="font-medium text-slate-700">Friday</span>
+                                    <span class="text-slate-600">9:00 AM - 8:00 PM</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-slate-50 transition"
+                                    data-day="saturday">
+                                    <span class="font-medium text-slate-700">Saturday</span>
+                                    <span class="text-slate-600">9:00 AM - 8:00 PM</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 rounded-lg bg-slate-100"
+                                    data-day="sunday">
+                                    <span class="font-medium text-slate-700">Sunday</span>
+                                    <span class="text-red-600 font-semibold">Closed</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1116,8 +1206,8 @@
     <section class="py-16 px-4 sm:px-6">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-12">
-                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Client Reviews</h2>
-                <p class="text-lg text-slate-600">What our clients say about us</p>
+                <h2 class="text-2xl sm:text-4xl font-bold text-slate-900 mb-4">Client Reviews</h2>
+                <p class="text-sm sm:text-lg text-slate-600">What our clients say about us</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1373,11 +1463,11 @@
             </div>
         </div>
     </section>
-    
-  
-        
-   
-  
+
+
+
+
+
 
     <!-- Footer -->
     <footer class="py-12 px-4 sm:px-6 bg-slate-900 text-white">
@@ -1679,12 +1769,65 @@
             });
         })();
 
+
         // Add entrance animations on page load
         (function () {
             window.addEventListener('load', () => {
                 // Trigger any initial animations
                 document.body.style.opacity = '1';
             });
+        })();
+
+        // Live Shop Status and Hours Calendar
+        (function () {
+            function updateShopStatus() {
+                const now = new Date();
+                const day = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+                const hour = now.getHours();
+                const minute = now.getMinutes();
+                const currentTime = hour + (minute / 60);
+
+                const openTime = 9; // 9 AM
+                const closeTime = 20; // 8 PM
+
+                // Check if open (Mon-Sat, 9AM-8PM)
+                const isOpen = day >= 1 && day <= 6 && currentTime >= openTime && currentTime < closeTime;
+
+                // Update status badge
+                const statusBadge = document.getElementById('liveStatus');
+                const heroStatus = document.getElementById('shopStatus');
+
+                if (statusBadge) {
+                    if (isOpen) {
+                        statusBadge.textContent = '🟢 Open Now';
+                        statusBadge.className = 'ml-auto px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700';
+                    } else {
+                        statusBadge.textContent = '🔴 Closed';
+                        statusBadge.className = 'ml-auto px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700';
+                    }
+                }
+
+                // Update hero status
+                if (heroStatus) {
+                    heroStatus.textContent = isOpen ? 'Open' : 'Closed';
+                    heroStatus.className = isOpen ? 'text-emerald-600 font-bold text-xl' : 'text-red-600 font-bold text-xl';
+                }
+
+                // Highlight current day in calendar
+                const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+                const currentDay = days[day];
+
+                document.querySelectorAll('[data-day]').forEach(dayEl => {
+                    if (dayEl.dataset.day === currentDay) {
+                        dayEl.classList.add('bg-emerald-50', 'border-l-4', 'border-emerald-600');
+                        dayEl.classList.remove('hover:bg-slate-50');
+                    }
+                });
+            }
+
+            // Update immediately and every minute
+            updateShopStatus();
+            setInterval(updateShopStatus, 60000);
         })();
     </script>
 </body>
