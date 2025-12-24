@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,28 +8,413 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Use Helvetica where available, with sane fallbacks */
-        body { font-family: "Helvetica Neue", Helvetica, Arial, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Liberation Sans', sans-serif; }
-        /* Small animation utilities */
-        .reveal { opacity: 0; transform: translateY(12px) scale(0.995); transition: opacity 550ms var(--tw-easing, cubic-bezier(.2,.8,.2,1)), transform 550ms var(--tw-easing, cubic-bezier(.2,.8,.2,1)); }
-        .reveal-visible { opacity: 1; transform: translateY(0) scale(1); }
-        .pop-in { animation: popIn 400ms cubic-bezier(.2,.8,.2,1) both; }
-        @keyframes popIn { from { transform: scale(.98); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        /* Lightbox overlay */
-        .lightbox-overlay { background: rgba(2,6,23,0.7); backdrop-filter: blur(4px); }
-        /* Slide down for mobile menu */
-        .menu-slide-down { animation: slideDown 320ms cubic-bezier(.2,.8,.2,1) both; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-6px) } to { opacity: 1; transform: translateY(0) } }
-        /* 3D Image Effects */
-        .perspective-3d { perspective: 1000px; }
-        .image-3d { transform-style: preserve-3d; animation: float3d 6s ease-in-out infinite; }
-        @keyframes float3d {
-            0%, 100% { transform: rotateX(5deg) rotateY(-8deg) rotateZ(3deg) translateY(0px); }
-            50% { transform: rotateX(-5deg) rotateY(8deg) rotateZ(-3deg) translateY(-12px); }
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Liberation Sans', sans-serif;
+            overflow-x: hidden;
         }
-        .image-3d:hover { animation: none; transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1.02); }
+
+        body {
+            width: 100%;
+        }
+
+        /* Mobile margins for better spacing */
+        @media (max-width: 640px) {
+            body {
+                padding-left: 16px;
+                padding-right: 16px;
+                position: relative;
+            }
+
+            /* Animated decorative lines on sides */
+            body::before,
+            body::after {
+                content: '';
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                width: 3px;
+                background: linear-gradient(180deg,
+                        transparent 0%,
+                        #10b981 10%,
+                        #059669 50%,
+                        #10b981 90%,
+                        transparent 100%);
+                background-size: 100% 200%;
+                animation: lineFlow 4s ease-in-out infinite;
+                z-index: 1;
+                pointer-events: none;
+            }
+
+            body::before {
+                left: 4px;
+                animation-delay: 0s;
+            }
+
+            body::after {
+                right: 4px;
+                animation-delay: 2s;
+                /* Offset for alternating effect */
+            }
+
+            @keyframes lineFlow {
+
+                0%,
+                100% {
+                    background-position: 0% 0%;
+                    opacity: 0.6;
+                }
+
+                50% {
+                    background-position: 0% 100%;
+                    opacity: 0.9;
+                }
+            }
+
+            /* Compensate for sections that already have padding */
+            section {
+                margin-left: -16px;
+                margin-right: -16px;
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            /* Keep nav full width */
+            nav {
+                margin-left: -16px;
+                margin-right: -16px;
+                z-index: 50;
+                position: relative;
+            }
+        }
+
+        /* Page Load Animation */
+        @keyframes pageLoad {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            animation: pageLoad 0.6s cubic-bezier(.2, .8, .2, 1) both;
+        }
+
+        /* Enhanced Reveal Animations with Stagger Support */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+            transition: opacity 650ms cubic-bezier(.2, .8, .2, 1), transform 650ms cubic-bezier(.2, .8, .2, 1);
+        }
+
+        .reveal-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Staggered delays for sequential reveals */
+        .reveal:nth-child(1) {
+            transition-delay: 0ms;
+        }
+
+        .reveal:nth-child(2) {
+            transition-delay: 100ms;
+        }
+
+        .reveal:nth-child(3) {
+            transition-delay: 200ms;
+        }
+
+        .reveal:nth-child(4) {
+            transition-delay: 300ms;
+        }
+
+        .reveal:nth-child(5) {
+            transition-delay: 400ms;
+        }
+
+        .reveal:nth-child(6) {
+            transition-delay: 500ms;
+        }
+
+        .reveal:nth-child(7) {
+            transition-delay: 600ms;
+        }
+
+        .pop-in {
+            animation: popIn 500ms cubic-bezier(.2, .8, .2, 1) both;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(.95);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Lightbox overlay */
+        .lightbox-overlay {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(8px);
+            animation: fadeIn 300ms ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Slide down for mobile menu */
+        .menu-slide-down {
+            animation: slideDown 350ms cubic-bezier(.2, .8, .2, 1) both;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-8px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        /* 3D Image Effects with Enhanced Float */
+        .perspective-3d {
+            perspective: 1200px;
+        }
+
+        .image-3d {
+            transform-style: preserve-3d;
+            animation: float3d 8s ease-in-out infinite;
+            transition: transform 0.5s cubic-bezier(.2, .8, .2, 1), box-shadow 0.5s ease;
+        }
+
+        @keyframes float3d {
+
+            0%,
+            100% {
+                transform: rotateX(3deg) rotateY(-6deg) rotateZ(2deg) translateY(0px);
+            }
+
+            50% {
+                transform: rotateX(-3deg) rotateY(6deg) rotateZ(-2deg) translateY(-15px);
+            }
+        }
+
+        .image-3d:hover {
+            animation: none;
+            transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1.03);
+            box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Magnetic Button Effect */
+        .magnetic-btn {
+            position: relative;
+            transition: transform 0.3s cubic-bezier(.2, .8, .2, 1), box-shadow 0.3s ease;
+        }
+
+        .magnetic-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+        }
+
+        .magnetic-btn:active {
+            transform: translateY(0px);
+        }
+
+        /* 3D Card Tilt Effect */
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.4s cubic-bezier(.2, .8, .2, 1), box-shadow 0.4s ease;
+        }
+
+        .card-3d:hover {
+            transform: perspective(1000px) rotateX(2deg) rotateY(5deg) translateY(-5px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Shimmer Effect for Cards */
+        .shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shimmer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .shimmer:hover::before {
+            left: 100%;
+        }
+
+        /* Animated Gradient Text */
+        .gradient-text {
+            background: linear-gradient(90deg, #10b981, #059669, #10b981);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% center;
+            }
+
+            50% {
+                background-position: 100% center;
+            }
+        }
+
+        /* Ken Burns Effect for Gallery */
+        .ken-burns {
+            transition: transform 8s ease-out;
+        }
+
+        .ken-burns:hover {
+            transform: scale(1.15);
+        }
+
+        /* Parallax Elements */
+        .parallax {
+            transition: transform 0.1s ease-out;
+            will-change: transform;
+        }
+
+        /* Smooth Hover Lift */
+        .hover-lift {
+            transition: transform 0.3s cubic-bezier(.2, .8, .2, 1), box-shadow 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Pulse Animation for Badges */
+        .pulse-badge {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        /* Bounce Slow for Icons */
+        .bounce-slow {
+            animation: bounceSlow 3s ease-in-out infinite;
+        }
+
+        @keyframes bounceSlow {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Rotate on Hover */
+        .rotate-hover {
+            transition: transform 0.4s cubic-bezier(.2, .8, .2, 1);
+        }
+
+        .rotate-hover:hover {
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        /* Glow Effect */
+        .glow-on-hover {
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .glow-on-hover:hover {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5), 0 0 40px rgba(16, 185, 129, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Slide In Animations */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.6s cubic-bezier(.2, .8, .2, 1) both;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.6s cubic-bezier(.2, .8, .2, 1) both;
+        }
+
+        /* Smooth Transitions for All Interactive Elements */
+        button,
+        a,
+        input,
+        select {
+            transition: all 0.3s cubic-bezier(.2, .8, .2, 1);
+        }
     </style>
-   
+
 </head>
+
 <body class="bg-white text-slate-900">
     <!-- Navigation -->
     <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-slate-200 shadow-sm">
@@ -40,24 +426,37 @@
                 <li><a href="#gallery" class="text-slate-600 hover:text-emerald-600 transition">Gallery</a></li>
                 <li><a href="#about" class="text-slate-600 hover:text-emerald-600 transition">About</a></li>
             </ul>
-            <button onclick="scrollToBooking()" class="hidden md:block px-6 py-2.5 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition text-sm">
+            <button onclick="scrollToBooking()"
+                class="hidden md:block px-6 py-2.5 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition text-sm">
                 Book Now
             </button>
-            <button id="mobileMenuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Toggle menu" class="md:hidden text-slate-600" onclick="toggleMenu()">
+            <button id="mobileMenuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Toggle menu"
+                class="md:hidden text-slate-600" onclick="toggleMenu()">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                    </path>
                 </svg>
             </button>
         </div>
-        
+
         <!-- Mobile Menu -->
         <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-slate-200" role="menu" aria-hidden="true">
             <ul class="flex flex-col">
-                <li><a href="#home" onclick="toggleMenu()" class="block px-6 py-4 text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition border-b border-slate-100">Home</a></li>
-                <li><a href="#services" onclick="toggleMenu()" class="block px-6 py-4 text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition border-b border-slate-100">Services</a></li>
-                <li><a href="#gallery" onclick="toggleMenu()" class="block px-6 py-4 text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition border-b border-slate-100">Gallery</a></li>
-                <li><a href="#about" onclick="toggleMenu()" class="block px-6 py-4 text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition border-b border-slate-100">About</a></li>
-                <li><a href="#booking" onclick="toggleMenu()" class="block px-6 py-4 text-emerald-600 font-semibold hover:bg-slate-50 transition">Book Now</a></li>
+                <li><a href="#home" onclick="toggleMenu()"
+                        class="block px-6 py-4 text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition border-b border-slate-100">Home</a>
+                </li>
+                <li><a href="#services" onclick="toggleMenu()"
+                        class="block px-6 py-4 text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition border-b border-slate-100">Services</a>
+                </li>
+                <li><a href="#gallery" onclick="toggleMenu()"
+                        class="block px-6 py-4 text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition border-b border-slate-100">Gallery</a>
+                </li>
+                <li><a href="#about" onclick="toggleMenu()"
+                        class="block px-6 py-4 text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition border-b border-slate-100">About</a>
+                </li>
+                <li><a href="#booking" onclick="toggleMenu()"
+                        class="block px-6 py-4 text-emerald-600 font-semibold hover:bg-slate-50 transition">Book Now</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -67,30 +466,36 @@
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="order-2 lg:order-1 reveal">
-                    <div class="inline-block px-4 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium mb-6">
+                    <div
+                        class="inline-block px-4 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium mb-6 pulse-badge">
                         Lagos Premier Barbershop
                     </div>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">
-                        Where Fresh Cuts Meet Modern Style
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                        <span class="gradient-text">Where Fresh Cuts Meet Modern Style</span>
                     </h1>
                     <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                        Experience precision cutting, expert fades, and personalized grooming services that elevate your look and confidence.
+                        Experience precision cutting, expert fades, and personalized grooming services that elevate your
+                        look and confidence.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 reveal">
-                        <button onclick="scrollToBooking()" class="px-8 py-4 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition shadow-lg shadow-emerald-600/30">
+                        <button onclick="scrollToBooking()"
+                            class="px-8 py-4 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition shadow-lg shadow-emerald-600/30 magnetic-btn glow-on-hover">
                             Book Appointment
                         </button>
-                        <button onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})" class="px-8 py-4 bg-white text-slate-700 font-semibold rounded-full border-2 border-slate-200 hover:border-emerald-600 hover:text-emerald-600 transition">
+                        <button onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})"
+                            class="px-8 py-4 bg-white text-slate-700 font-semibold rounded-full border-2 border-slate-200 hover:border-emerald-600 hover:text-emerald-600 transition magnetic-btn hover-lift">
                             View Services
                         </button>
                     </div>
                     <div class="mt-12 grid grid-cols-3 gap-8">
                         <div>
-                            <div class="text-3xl font-bold text-emerald-600"><span class="stat" data-target="500">0</span>+</div>
+                            <div class="text-3xl font-bold text-emerald-600"><span class="stat"
+                                    data-target="500">0</span>+</div>
                             <div class="text-sm text-slate-600">Happy Clients</div>
                         </div>
                         <div>
-                            <div class="text-3xl font-bold text-emerald-600"><span class="stat" data-target="5">0</span>+</div>
+                            <div class="text-3xl font-bold text-emerald-600"><span class="stat"
+                                    data-target="5">0</span>+</div>
                             <div class="text-sm text-slate-600">Years Experience</div>
                         </div>
                         <div>
@@ -101,13 +506,15 @@
                 </div>
                 <div class="order-1 lg:order-2 reveal">
                     <div class="relative">
-                        <div class="aspect-square rounded-3xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white shadow-2xl">
+                        <div
+                            class="aspect-square rounded-3xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white shadow-2xl">
                             <div class="text-center">
-                                
+
                                 <div class="text-2xl font-bold"><img src="og.jpg" alt="Ogee" class="rounded-3xl"></div>
                             </div>
                         </div>
-                        <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-white rounded-2xl shadow-xl flex items-center justify-center">
+                        <div
+                            class="absolute -bottom-6 -right-6 w-32 h-32 bg-white rounded-2xl shadow-xl flex items-center justify-center">
                             <div class="text-center">
                                 <div class="text-emerald-600 font-bold text-xl">Open</div>
                                 <div class="text-slate-600 text-xs">Mon-Sat</div>
@@ -125,17 +532,21 @@
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Signature Services</h2>
-                <p class="text-lg text-slate-600 max-w-2xl mx-auto">Expert cuts and grooming tailored to your unique style</p>
+                <p class="text-lg text-slate-600 max-w-2xl mx-auto">Expert cuts and grooming tailored to your unique
+                    style</p>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- The Ogee Fade -->
-                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal">
+                <div
+                    class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal card-3d shimmer">
                     <div class="w-full h-40 bg-slate-200 rounded-xl overflow-hidden mb-4">
-                        <img src="assets/ogee_fade.jpeg" alt="The Ogee Fade" class="w-full h-full object-cover transition group-hover:scale-105" />
+                        <img src="assets/ogee_fade.jpeg" alt="The Ogee Fade"
+                            class="w-full h-full object-cover transition group-hover:scale-105 ken-burns" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">The Ogee Fade</h3>
-                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">My signature cut. Clean fade with precision line-up and optional design.</p>
+                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">My signature cut. Clean fade with precision
+                        line-up and optional design.</p>
                     <div class="flex justify-between items-center">
                         <span class="text-2xl font-bold text-emerald-600">₦3,000</span>
                         <span class="text-sm text-slate-500">45 min</span>
@@ -143,12 +554,15 @@
                 </div>
 
                 <!-- Burst Fade Mohawk -->
-                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal">
+                <div
+                    class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal card-3d shimmer">
                     <div class="w-full h-40 bg-slate-200 rounded-xl overflow-hidden mb-4">
-                        <img src="assets/mohawk.jpeg" alt="Burst Fade Mohawk" class="w-full h-full object-cover transition group-hover:scale-105" />
+                        <img src="assets/mohawk.jpeg" alt="Burst Fade Mohawk"
+                            class="w-full h-full object-cover transition group-hover:scale-105 ken-burns" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Burst Fade Mohawk</h3>
-                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">Trending street style. Bold burst fade with a sharp mohawk.</p>
+                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">Trending street style. Bold burst fade with a
+                        sharp mohawk.</p>
                     <div class="flex justify-between items-center">
                         <span class="text-2xl font-bold text-emerald-600">₦3,500</span>
                         <span class="text-sm text-slate-500">50 min</span>
@@ -156,12 +570,15 @@
                 </div>
 
                 <!-- Twist Sponge Top -->
-                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal">
+                <div
+                    class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal card-3d shimmer">
                     <div class="w-full h-40 bg-slate-200 rounded-xl overflow-hidden mb-4">
-                        <img src="assets/twist.jpeg" alt="Twist Sponge / High Top" class="w-full h-full object-cover transition group-hover:scale-105" />
+                        <img src="assets/twist.jpeg" alt="Twist Sponge / High Top"
+                            class="w-full h-full object-cover transition group-hover:scale-105 ken-burns" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Twist Sponge / High Top</h3>
-                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">Classic afro-textured style with clean sides and defined shape.</p>
+                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">Classic afro-textured style with clean sides
+                        and defined shape.</p>
                     <div class="flex justify-between items-center">
                         <span class="text-2xl font-bold text-emerald-600">₦3,000</span>
                         <span class="text-sm text-slate-500">45 min</span>
@@ -169,12 +586,15 @@
                 </div>
 
                 <!-- Shadow Fade -->
-                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal">
+                <div
+                    class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal card-3d shimmer">
                     <div class="w-full h-40 bg-slate-200 rounded-xl overflow-hidden mb-4">
-                        <img src="assets/waves.jpeg" alt="Shadow Fade with Waves" class="w-full h-full object-cover transition group-hover:scale-105" />
+                        <img src="assets/waves.jpeg" alt="Shadow Fade with Waves"
+                            class="w-full h-full object-cover transition group-hover:scale-105 ken-burns" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Shadow Fade with Waves</h3>
-                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">Smooth blend perfection that enhances your wave pattern.</p>
+                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">Smooth blend perfection that enhances your
+                        wave pattern.</p>
                     <div class="flex justify-between items-center">
                         <span class="text-2xl font-bold text-emerald-600">₦2,800</span>
                         <span class="text-sm text-slate-500">40 min</span>
@@ -182,12 +602,15 @@
                 </div>
 
                 <!-- Low Taper -->
-                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal">
+                <div
+                    class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal card-3d shimmer">
                     <div class="w-full h-40 bg-slate-200 rounded-xl overflow-hidden mb-4">
-                        <img src="assets/taper.jpeg" alt="Low Taper Curly Look" class="w-full h-full object-cover transition group-hover:scale-105" />
+                        <img src="assets/taper.jpeg" alt="Low Taper Curly Look"
+                            class="w-full h-full object-cover transition group-hover:scale-105 ken-burns" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Low Taper Curly Look</h3>
-                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">Professional and stylish with natural-looking curls.</p>
+                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">Professional and stylish with natural-looking
+                        curls.</p>
                     <div class="flex justify-between items-center">
                         <span class="text-2xl font-bold text-emerald-600">₦2,500</span>
                         <span class="text-sm text-slate-500">40 min</span>
@@ -195,12 +618,15 @@
                 </div>
 
                 <!-- Dread Retouch -->
-                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal">
+                <div
+                    class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer reveal card-3d shimmer">
                     <div class="w-full h-40 bg-slate-200 rounded-xl overflow-hidden mb-4">
-                        <img src="assets/dreads.jpeg" alt="Dread Retouch" class="w-full h-full object-cover transition group-hover:scale-105" />
+                        <img src="assets/dreads.jpeg" alt="Dread Retouch"
+                            class="w-full h-full object-cover transition group-hover:scale-105 ken-burns" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Dread Retouch + Fade</h3>
-                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">Expert retouch with clean fade to keep your locs sharp.</p>
+                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">Expert retouch with clean fade to keep your
+                        locs sharp.</p>
                     <div class="flex justify-between items-center">
                         <span class="text-2xl font-bold text-emerald-600">₦4,000</span>
                         <span class="text-sm text-slate-500">60 min</span>
@@ -208,12 +634,15 @@
                 </div>
 
                 <!-- Beard Grooming -->
-                <div class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer md:col-span-2 lg:col-span-1 reveal">
+                <div
+                    class="bg-white rounded-2xl p-6 hover:shadow-xl transition border border-slate-200 group cursor-pointer md:col-span-2 lg:col-span-1 reveal card-3d shimmer">
                     <div class="w-full h-40 bg-slate-200 rounded-xl overflow-hidden mb-4">
-                        <img src="assets/beards.jpeg" alt="Beard Art & Shaping" class="w-full h-full object-cover transition group-hover:scale-105" />
+                        <img src="assets/beards.jpeg" alt="Beard Art & Shaping"
+                            class="w-full h-full object-cover transition group-hover:scale-105 ken-burns" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Beard Art & Shaping</h3>
-                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">Precision sculpting, line-ups, and artistic facial hair designs.</p>
+                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">Precision sculpting, line-ups, and artistic
+                        facial hair designs.</p>
                     <div class="flex justify-between items-center">
                         <span class="text-2xl font-bold text-emerald-600">₦1,500</span>
                         <span class="text-sm text-slate-500">20 min</span>
@@ -223,208 +652,225 @@
 
             <!-- View All Services Button -->
             <div class="text-center mt-12">
-                <button onclick="scrollToBooking()" class="px-8 py-3 bg-slate-900 text-white font-semibold rounded-full hover:bg-slate-800 transition">
+                <button onclick="scrollToBooking()"
+                    class="px-8 py-3 bg-slate-900 text-white font-semibold rounded-full hover:bg-slate-800 transition magnetic-btn glow-on-hover">
                     Book Your Service
                 </button>
             </div>
         </div>
     </section>
 
-   <section class="py-16 px-4 sm:px-6">
-    <div class="max-w-4xl mx-auto">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Find Your Perfect Style</h2>
-            <p class="text-lg text-slate-600">Not sure which cut suits you? Take our quick quiz!</p>
-        </div>
-        
-        <div class="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-slate-200 transition-all duration-300" id="mainCard">
-            <div id="quizContainer">
-                <div id="question" class="text-xl md:text-2xl font-semibold text-slate-900 mb-8 text-center">What's your vibe?</div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <button onclick="startResult('professional')" class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group quiz-btn">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center group-hover:bg-emerald-600 transition shadow-sm">
-                                <span class="text-2xl">💼</span>
-                            </div>
-                            <div>
-                                <div class="font-semibold text-slate-900">Professional</div>
-                                <div class="text-sm text-slate-600">Clean & polished</div>
-                            </div>
-                        </div>
-                    </button>
+    <section class="py-16 px-4 sm:px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Find Your Perfect Style</h2>
+                <p class="text-lg text-slate-600">Not sure which cut suits you? Take our quick quiz!</p>
+            </div>
 
-                    <button onclick="startResult('street')" class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group quiz-btn">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center group-hover:bg-emerald-600 transition shadow-sm">
-                                <span class="text-2xl">🔥</span>
+            <div class="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-slate-200 transition-all duration-300"
+                id="mainCard">
+                <div id="quizContainer">
+                    <div id="question" class="text-xl md:text-2xl font-semibold text-slate-900 mb-8 text-center">What's
+                        your vibe?</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="startResult('professional')"
+                            class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group quiz-btn hover-lift card-3d">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 bg-white rounded-xl flex items-center justify-center group-hover:bg-emerald-600 transition shadow-sm">
+                                    <span class="text-2xl">💼</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-slate-900">Professional</div>
+                                    <div class="text-sm text-slate-600">Clean & polished</div>
+                                </div>
                             </div>
-                            <div>
-                                <div class="font-semibold text-slate-900">Street Style</div>
-                                <div class="text-sm text-slate-600">Bold & trendy</div>
-                            </div>
-                        </div>
-                    </button>
+                        </button>
 
-                    <button onclick="startResult('natural')" class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group quiz-btn">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center group-hover:bg-emerald-600 transition shadow-sm">
-                                <span class="text-2xl">🌀</span>
+                        <button onclick="startResult('street')"
+                            class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group quiz-btn hover-lift card-3d">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 bg-white rounded-xl flex items-center justify-center group-hover:bg-emerald-600 transition shadow-sm">
+                                    <span class="text-2xl">🔥</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-slate-900">Street Style</div>
+                                    <div class="text-sm text-slate-600">Bold & trendy</div>
+                                </div>
                             </div>
-                            <div>
-                                <div class="font-semibold text-slate-900">Natural</div>
-                                <div class="text-sm text-slate-600">Textured & authentic</div>
-                            </div>
-                        </div>
-                    </button>
+                        </button>
 
-                    <button onclick="startResult('creative')" class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group quiz-btn">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center group-hover:bg-emerald-600 transition shadow-sm">
-                                <span class="text-2xl">🎨</span>
+                        <button onclick="startResult('natural')"
+                            class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group quiz-btn hover-lift card-3d">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 bg-white rounded-xl flex items-center justify-center group-hover:bg-emerald-600 transition shadow-sm">
+                                    <span class="text-2xl">🌀</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-slate-900">Natural</div>
+                                    <div class="text-sm text-slate-600">Textured & authentic</div>
+                                </div>
                             </div>
-                            <div>
-                                <div class="font-semibold text-slate-900">Creative</div>
-                                <div class="text-sm text-slate-600">Artistic & unique</div>
+                        </button>
+
+                        <button onclick="startResult('creative')"
+                            class="p-6 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-600 rounded-2xl transition font-medium border-2 border-slate-200 text-left group quiz-btn hover-lift card-3d">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 bg-white rounded-xl flex items-center justify-center group-hover:bg-emerald-600 transition shadow-sm">
+                                    <span class="text-2xl">🎨</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-slate-900">Creative</div>
+                                    <div class="text-sm text-slate-600">Artistic & unique</div>
+                                </div>
                             </div>
-                        </div>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quizResult" class="hidden text-center fade-in">
+                    <div
+                        class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce-slow">
+                        <span class="text-4xl" id="resultEmoji">✨</span>
+                    </div>
+                    <h3 class="text-lg font-medium text-emerald-600 mb-2 uppercase tracking-wide"
+                        id="styleCategoryName">Your Style</h3>
+
+                    <h2 id="resultTitle" class="text-3xl font-bold text-slate-900 mb-4 min-h-[40px]">Thinking...</h2>
+
+                    <p id="resultDesc" class="text-lg text-slate-600 mb-8 max-w-lg mx-auto">Great choice! This style
+                        balances specific features with a modern aesthetic.</p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <button onclick="rerollStyle()"
+                            class="w-full sm:w-auto px-6 py-3 bg-slate-100 text-slate-700 font-semibold rounded-full hover:bg-slate-200 hover:shadow-md transition flex items-center justify-center gap-2 group">
+                            <span>🔄</span> Show Another
+                        </button>
+
+                        <button onclick="scrollToBooking()"
+                            class="w-full sm:w-auto px-6 py-3 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 hover:shadow-lg hover:-translate-y-0.5 transition magnetic-btn glow-on-hover">
+                            Book This Style
+                        </button>
+                    </div>
+
+                    <button onclick="resetToMenu()"
+                        class="mt-6 text-sm text-slate-400 hover:text-slate-600 underline decoration-slate-300">
+                        Start Over
                     </button>
                 </div>
             </div>
-
-            <div id="quizResult" class="hidden text-center fade-in">
-                <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce-slow">
-                    <span class="text-4xl" id="resultEmoji">✨</span>
-                </div>
-                <h3 class="text-lg font-medium text-emerald-600 mb-2 uppercase tracking-wide" id="styleCategoryName">Your Style</h3>
-                
-                <h2 id="resultTitle" class="text-3xl font-bold text-slate-900 mb-4 min-h-[40px]">Thinking...</h2>
-                
-                <p id="resultDesc" class="text-lg text-slate-600 mb-8 max-w-lg mx-auto">Great choice! This style balances specific features with a modern aesthetic.</p>
-                
-                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <button onclick="rerollStyle()" class="w-full sm:w-auto px-6 py-3 bg-slate-100 text-slate-700 font-semibold rounded-full hover:bg-slate-200 hover:shadow-md transition flex items-center justify-center gap-2 group">
-                        <span>🔄</span> Show Another
-                    </button>
-                    
-                    <button onclick="scrollToBooking()" class="w-full sm:w-auto px-6 py-3 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 hover:shadow-lg hover:-translate-y-0.5 transition">
-                        Book This Style
-                    </button>
-                </div>
-                
-                <button onclick="resetToMenu()" class="mt-6 text-sm text-slate-400 hover:text-slate-600 underline decoration-slate-300">
-                    Start Over
-                </button>
-            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<script>
-    // 1. DATA: The database of hairstyles
-    const styleDatabase = {
-        professional: {
-            emoji: "💼",
-            styles: [
-                { name: "The Executive Contour", desc: "A timeless classic. Tight sides with a longer top, combed to the side for a sharp boardroom look." },
-                { name: "Ivy League Cut", desc: "Smart and preppy. Short enough to be low maintenance, long enough to style with a bit of pomade." },
-                { name: "Taper Fade", desc: "Modern business. Clean gradient on the sides keeps it fresh while remaining office-appropriate." },
-                { name: "Classic Side Part", desc: "The ultimate gentleman's cut. defined part line with a matte finish for sophistication." }
-            ]
-        },
-        street: {
-            emoji: "🔥",
-            styles: [
-                { name: "Textured Crop", desc: "Short, choppy, and effortlessly cool. Great for adding volume to thinner hair." },
-                { name: "Modern Mullet", desc: "Business in the front, party in the back. The ultimate statement piece for the bold." },
-                { name: "Buzz Cut with Line Design", desc: "Minimalist maintenance with maximum impact. Add a geometric line for extra edge." },
-                { name: "Burst Fade Mohawk", desc: "Aggressive and stylish. A wide mohawk that fades around the ears for a striking silhouette." }
-            ]
-        },
-        natural: {
-            emoji: "🌀",
-            styles: [
-                { name: "Mid-Taper Afro", desc: "Let your texture shine. Kept neat around the ears/neck but full volume on top." },
-                { name: "Twist Sponge Top", desc: "Defined curls using a sponge brush. Offers great height and distinct texture separation." },
-                { name: "Short Locs", desc: "The start of a journey. clean parts and uniform length for a neat, authentic look." },
-                { name: "Cornrows with Fade", desc: "Protective and sharp. Intricate braiding on top meeting a clean skin fade on the sides." }
-            ]
-        },
-        creative: {
-            emoji: "🎨",
-            styles: [
-                { name: "Asymmetrical Undercut", desc: "Disconnect your style. Shaved tight on one side, long and flowing on the other." },
-                { name: "The Pompadour", desc: "Vintage rockabilly vibes with a modern twist. High volume and lots of attitude." },
-                { name: "Faux Hawk", desc: "Rebellious but manageable. All the edge of a mohawk without the commitment of shaving the sides completely." },
-                { name: "Geometric Crop", desc: "Sharp angles and blunt bangs. A high-fashion look that frames the face perfectly." }
-            ]
+    <script>
+        // 1. DATA: The database of hairstyles
+        const styleDatabase = {
+            professional: {
+                emoji: "💼",
+                styles: [
+                    { name: "The Executive Contour", desc: "A timeless classic. Tight sides with a longer top, combed to the side for a sharp boardroom look." },
+                    { name: "Ivy League Cut", desc: "Smart and preppy. Short enough to be low maintenance, long enough to style with a bit of pomade." },
+                    { name: "Taper Fade", desc: "Modern business. Clean gradient on the sides keeps it fresh while remaining office-appropriate." },
+                    { name: "Classic Side Part", desc: "The ultimate gentleman's cut. defined part line with a matte finish for sophistication." }
+                ]
+            },
+            street: {
+                emoji: "🔥",
+                styles: [
+                    { name: "Textured Crop", desc: "Short, choppy, and effortlessly cool. Great for adding volume to thinner hair." },
+                    { name: "Modern Mullet", desc: "Business in the front, party in the back. The ultimate statement piece for the bold." },
+                    { name: "Buzz Cut with Line Design", desc: "Minimalist maintenance with maximum impact. Add a geometric line for extra edge." },
+                    { name: "Burst Fade Mohawk", desc: "Aggressive and stylish. A wide mohawk that fades around the ears for a striking silhouette." }
+                ]
+            },
+            natural: {
+                emoji: "🌀",
+                styles: [
+                    { name: "Mid-Taper Afro", desc: "Let your texture shine. Kept neat around the ears/neck but full volume on top." },
+                    { name: "Twist Sponge Top", desc: "Defined curls using a sponge brush. Offers great height and distinct texture separation." },
+                    { name: "Short Locs", desc: "The start of a journey. clean parts and uniform length for a neat, authentic look." },
+                    { name: "Cornrows with Fade", desc: "Protective and sharp. Intricate braiding on top meeting a clean skin fade on the sides." }
+                ]
+            },
+            creative: {
+                emoji: "🎨",
+                styles: [
+                    { name: "Asymmetrical Undercut", desc: "Disconnect your style. Shaved tight on one side, long and flowing on the other." },
+                    { name: "The Pompadour", desc: "Vintage rockabilly vibes with a modern twist. High volume and lots of attitude." },
+                    { name: "Faux Hawk", desc: "Rebellious but manageable. All the edge of a mohawk without the commitment of shaving the sides completely." },
+                    { name: "Geometric Crop", desc: "Sharp angles and blunt bangs. A high-fashion look that frames the face perfectly." }
+                ]
+            }
+        };
+
+        // 2. STATE: Track what the user is currently looking at
+        let currentCategory = '';
+        let currentStyleIndex = -1;
+
+        // 3. LOGIC: Initialize the result view
+        function startResult(category) {
+            currentCategory = category;
+
+            // Hide Quiz, Show Result
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.getElementById('quizResult').classList.remove('hidden');
+
+            // Set the category emoji and name immediately
+            document.getElementById('resultEmoji').innerText = styleDatabase[category].emoji;
+            document.getElementById('styleCategoryName').innerText = category + " Selections";
+
+            // Generate the first random style
+            rerollStyle();
         }
-    };
 
-    // 2. STATE: Track what the user is currently looking at
-    let currentCategory = '';
-    let currentStyleIndex = -1;
+        // 4. LOGIC: The "Spice" - Randomizer
+        function rerollStyle() {
+            const categoryData = styleDatabase[currentCategory];
+            const stylesList = categoryData.styles;
 
-    // 3. LOGIC: Initialize the result view
-    function startResult(category) {
-        currentCategory = category;
-        
-        // Hide Quiz, Show Result
-        document.getElementById('quizContainer').classList.add('hidden');
-        document.getElementById('quizResult').classList.remove('hidden');
-        
-        // Set the category emoji and name immediately
-        document.getElementById('resultEmoji').innerText = styleDatabase[category].emoji;
-        document.getElementById('styleCategoryName').innerText = category + " Selections";
-        
-        // Generate the first random style
-        rerollStyle();
-    }
+            // Algorithm: Pick a random index, but make sure it isn't the same as the last one
+            // (Unless there's only 1 item in the list)
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * stylesList.length);
+            } while (newIndex === currentStyleIndex && stylesList.length > 1);
 
-    // 4. LOGIC: The "Spice" - Randomizer
-    function rerollStyle() {
-        const categoryData = styleDatabase[currentCategory];
-        const stylesList = categoryData.styles;
-        
-        // Algorithm: Pick a random index, but make sure it isn't the same as the last one
-        // (Unless there's only 1 item in the list)
-        let newIndex;
-        do {
-            newIndex = Math.floor(Math.random() * stylesList.length);
-        } while (newIndex === currentStyleIndex && stylesList.length > 1);
-        
-        // Update State
-        currentStyleIndex = newIndex;
-        const selectedStyle = stylesList[newIndex];
+            // Update State
+            currentStyleIndex = newIndex;
+            const selectedStyle = stylesList[newIndex];
 
-        // Update DOM with animation effect
-        const titleEl = document.getElementById('resultTitle');
-        const descEl = document.getElementById('resultDesc');
+            // Update DOM with animation effect
+            const titleEl = document.getElementById('resultTitle');
+            const descEl = document.getElementById('resultDesc');
 
-        // Simple fade effect
-        titleEl.style.opacity = '0';
-        descEl.style.opacity = '0';
+            // Simple fade effect
+            titleEl.style.opacity = '0';
+            descEl.style.opacity = '0';
 
-        setTimeout(() => {
-            titleEl.innerText = selectedStyle.name;
-            descEl.innerText = selectedStyle.desc;
-            titleEl.style.opacity = '1';
-            descEl.style.opacity = '1';
-        }, 150);
-    }
+            setTimeout(() => {
+                titleEl.innerText = selectedStyle.name;
+                descEl.innerText = selectedStyle.desc;
+                titleEl.style.opacity = '1';
+                descEl.style.opacity = '1';
+            }, 150);
+        }
 
-    // 5. LOGIC: Go back to main menu
-    function resetToMenu() {
-        document.getElementById('quizResult').classList.add('hidden');
-        document.getElementById('quizContainer').classList.remove('hidden');
-        currentCategory = '';
-        currentStyleIndex = -1;
-    }
+        // 5. LOGIC: Go back to main menu
+        function resetToMenu() {
+            document.getElementById('quizResult').classList.add('hidden');
+            document.getElementById('quizContainer').classList.remove('hidden');
+            currentCategory = '';
+            currentStyleIndex = -1;
+        }
 
-    // Placeholder for booking
-    function scrollToBooking() {
-        alert("Redirecting to booking system for: " + document.getElementById('resultTitle').innerText);
-    }
-</script>
+        // Placeholder for booking
+        function scrollToBooking() {
+            alert("Redirecting to booking system for: " + document.getElementById('resultTitle').innerText);
+        }
+    </script>
 
     <!-- Gallery Section -->
     <section id="gallery" class="py-16 px-4 sm:px-6 bg-slate-50">
@@ -433,50 +879,62 @@
                 <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Our Work</h2>
                 <p class="text-lg text-slate-600">Before & after transformations</p>
             </div>
-            
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer" data-img="og.jpg" data-caption="Our work" tabindex="0">
-                    <div class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
+                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer"
+                    data-img="og.jpg" data-caption="Our work" tabindex="0">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
                         <div class="text-center">
                             <div class="text-6xl mb-2">📸</div>
                             <div class="text-slate-600 font-medium">Your photos here</div>
                         </div>
                     </div>
                 </div>
-                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer" data-img="og.jpg" data-caption="Our work" tabindex="0">
-                    <div class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
+                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer"
+                    data-img="og.jpg" data-caption="Our work" tabindex="0">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
                         <div class="text-center">
                             <div class="text-6xl mb-2">📸</div>
                             <div class="text-slate-600 font-medium">Your photos here</div>
                         </div>
                     </div>
                 </div>
-                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer" data-img="og.jpg" data-caption="Our work" tabindex="0">
-                    <div class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
+                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer"
+                    data-img="og.jpg" data-caption="Our work" tabindex="0">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
                         <div class="text-center">
                             <div class="text-6xl mb-2">📸</div>
                             <div class="text-slate-600 font-medium">Your photos here</div>
                         </div>
                     </div>
                 </div>
-                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer" data-img="og.jpg" data-caption="Our work" tabindex="0">
-                    <div class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
+                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer"
+                    data-img="og.jpg" data-caption="Our work" tabindex="0">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
                         <div class="text-center">
                             <div class="text-6xl mb-2">📸</div>
                             <div class="text-slate-600 font-medium">Your photos here</div>
                         </div>
                     </div>
                 </div>
-                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer" data-img="og.jpg" data-caption="Our work" tabindex="0">
-                    <div class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
+                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer"
+                    data-img="og.jpg" data-caption="Our work" tabindex="0">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
                         <div class="text-center">
                             <div class="text-6xl mb-2">📸</div>
                             <div class="text-slate-600 font-medium">Your photos here</div>
                         </div>
                     </div>
                 </div>
-                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer" data-img="og.jpg" data-caption="Our work" tabindex="0">
-                    <div class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
+                <div class="relative group overflow-hidden rounded-2xl aspect-square bg-slate-200 gallery-item reveal cursor-pointer"
+                    data-img="og.jpg" data-caption="Our work" tabindex="0">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
                         <div class="text-center">
                             <div class="text-6xl mb-2">📸</div>
                             <div class="text-slate-600 font-medium">Your photos here</div>
@@ -494,47 +952,62 @@
                 <div>
                     <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-6">Why Choose Ogee Barbershop?</h2>
                     <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                        With over 5 years of experience and 500+ satisfied clients, I've mastered the art of precision cutting and personalized grooming. Every client gets my full attention and a cut tailored to their unique style.
+                        With over 5 years of experience and 500+ satisfied clients, I've mastered the art of precision
+                        cutting and personalized grooming. Every client gets my full attention and a cut tailored to
+                        their unique style.
                     </p>
-                    
+
                     <div class="space-y-4 mb-8">
                         <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            <div
+                                class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
                                 </svg>
                             </div>
                             <div>
                                 <h3 class="font-semibold text-slate-900 mb-1">Professional Tools</h3>
-                                <p class="text-slate-600 text-sm">Premium Wahl & Andis clippers for perfect cuts every time</p>
+                                <p class="text-slate-600 text-sm">Premium Wahl & Andis clippers for perfect cuts every
+                                    time</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            <div
+                                class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
                                 </svg>
                             </div>
                             <div>
                                 <h3 class="font-semibold text-slate-900 mb-1">Flexible Scheduling</h3>
-                                <p class="text-slate-600 text-sm">Open Monday to Saturday, 9AM to 8PM for your convenience</p>
+                                <p class="text-slate-600 text-sm">Open Monday to Saturday, 9AM to 8PM for your
+                                    convenience</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            <div
+                                class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
                                 </svg>
                             </div>
                             <div>
                                 <h3 class="font-semibold text-slate-900 mb-1">Hygienic Environment</h3>
-                                <p class="text-slate-600 text-sm">Clean, sanitized equipment and comfortable atmosphere</p>
+                                <p class="text-slate-600 text-sm">Clean, sanitized equipment and comfortable atmosphere
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="relative perspective-3d">
-                    <img src="assets/Barbering Accessories.jpg" alt="Barbing Accessories" class="rounded-3xl object-cover w-full shadow-2xl image-3d transition-transform duration-300 hover:shadow-emerald-600/50">
+                    <img src="assets/Barbering Accessories.jpg" alt="Barbing Accessories"
+                        class="rounded-3xl object-cover w-full shadow-2xl image-3d transition-transform duration-300 hover:shadow-emerald-600/50">
                 </div>
             </div>
         </div>
@@ -547,10 +1020,12 @@
                 <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Book Your Appointment</h2>
                 <p class="text-lg text-slate-600">Quick and easy booking via WhatsApp</p>
             </div>
-            
+
             <div class="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-slate-200">
                 <div class="space-y-4">
-                    <a href="https://wa.me/2348054374901?text=Hi%20Ogee%2C%20I%20want%20to%20book%20a%20haircut%21" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl transition group">
+                    <a href="https://wa.me/2348054374901?text=Hi%20Ogee%2C%20I%20want%20to%20book%20a%20haircut%21"
+                        target="_blank" rel="noopener noreferrer"
+                        class="flex items-center justify-between p-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl transition group magnetic-btn glow-on-hover">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                                 <span class="text-2xl">💈</span>
@@ -560,12 +1035,16 @@
                                 <div class="text-sm text-emerald-100">Schedule your appointment now</div>
                             </div>
                         </div>
-                        <svg class="w-6 h-6 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        <svg class="w-6 h-6 group-hover:translate-x-1 transition" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
                         </svg>
                     </a>
 
-                    <a href="https://wa.me/2348054374901?text=I%20need%20a%20fresh%20fade%20ASAP%21" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-6 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-2xl transition group">
+                    <a href="https://wa.me/2348054374901?text=I%20need%20a%20fresh%20fade%20ASAP%21" target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center justify-between p-6 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-2xl transition group hover-lift">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
                                 <span class="text-2xl">🔥</span>
@@ -575,12 +1054,16 @@
                                 <div class="text-sm text-slate-600">Quick booking for urgent cuts</div>
                             </div>
                         </div>
-                        <svg class="w-6 h-6 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        <svg class="w-6 h-6 group-hover:translate-x-1 transition" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
                         </svg>
                     </a>
 
-                    <a href="https://wa.me/2348054374901?text=Let%27s%20fix%20my%20look%20fam%21" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-6 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-2xl transition group">
+                    <a href="https://wa.me/2348054374901?text=Let%27s%20fix%20my%20look%20fam%21" target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center justify-between p-6 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-2xl transition group">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
                                 <span class="text-2xl">✨</span>
@@ -590,8 +1073,10 @@
                                 <div class="text-sm text-slate-600">Complete style transformation</div>
                             </div>
                         </div>
-                        <svg class="w-6 h-6 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        <svg class="w-6 h-6 group-hover:translate-x-1 transition" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
                         </svg>
                     </a>
                 </div>
@@ -601,8 +1086,11 @@
                         <div>
                             <div class="flex items-center justify-center sm:justify-start gap-2 text-slate-600 mb-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                    </path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 </svg>
                                 <span class="font-medium">Location</span>
                             </div>
@@ -611,7 +1099,8 @@
                         <div>
                             <div class="flex items-center justify-center sm:justify-start gap-2 text-slate-600 mb-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                                 <span class="font-medium">Hours</span>
                             </div>
@@ -630,46 +1119,265 @@
                 <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Client Reviews</h2>
                 <p class="text-lg text-slate-600">What our clients say about us</p>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white rounded-2xl p-6 border border-slate-200">
-                    <div class="flex gap-1 mb-4">
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Review 1 -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 reveal hover-lift group">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform duration-300 rotate-hover">
+                            CA
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-semibold text-slate-900">Chukwuemeka A.</div>
+                            <a href="https://instagram.com/chukwuemeka" target="_blank" rel="noopener noreferrer"
+                                class="text-xs text-emerald-600 hover:text-emerald-700 flex items-center gap-1 transition">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                                </svg>
+                                @chukwuemeka
+                            </a>
+                        </div>
                     </div>
-                    <p class="text-slate-600 mb-4">"Best barber in Lagos! Ogee knows exactly what I want and always delivers. My fade is always clean and sharp."</p>
-                    <div class="font-semibold text-slate-900">Chukwuemeka A.</div>
+                    <div class="flex gap-1 mb-3">
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">"Best barber in Lagos! Ogee knows exactly what I
+                        want and always delivers. My fade is always clean and sharp."</p>
                 </div>
 
-                <div class="bg-white rounded-2xl p-6 border border-slate-200">
-                    <div class="flex gap-1 mb-4">
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <!-- Review 2 -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 reveal hover-lift group">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform duration-300 rotate-hover">
+                            DO
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-semibold text-slate-900">David O.</div>
+                            <a href="https://instagram.com/david_o" target="_blank" rel="noopener noreferrer"
+                                class="text-xs text-emerald-600 hover:text-emerald-700 flex items-center gap-1 transition">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                                </svg>
+                                @david_o
+                            </a>
+                        </div>
                     </div>
-                    <p class="text-slate-600 mb-4">"Professional service, clean environment, and the attention to detail is amazing. I won't go anywhere else!"</p>
-                    <div class="font-semibold text-slate-900">David O.</div>
+                    <div class="flex gap-1 mb-3">
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">"Professional service, clean environment, and the
+                        attention to detail is amazing. I won't go anywhere else!"</p>
                 </div>
 
-                <div class="bg-white rounded-2xl p-6 border border-slate-200">
-                    <div class="flex gap-1 mb-4">
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <!-- Review 3 -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 reveal hover-lift group">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform duration-300 rotate-hover">
+                            SI
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-semibold text-slate-900">Samuel I.</div>
+                            <a href="https://instagram.com/samuel_i" target="_blank" rel="noopener noreferrer"
+                                class="text-xs text-emerald-600 hover:text-emerald-700 flex items-center gap-1 transition">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                                </svg>
+                                @samuel_i
+                            </a>
+                        </div>
                     </div>
-                    <p class="text-slate-600 mb-4">"My locs always look fresh after Ogee works on them. He's patient, skilled, and really cares about the result."</p>
-                    <div class="font-semibold text-slate-900">Samuel I.</div>
+                    <div class="flex gap-1 mb-3">
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">"My locs always look fresh after Ogee works on
+                        them. He's patient, skilled, and really cares about the result."</p>
+                </div>
+
+                <!-- Review 4 - NEW -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 reveal hover-lift group">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform duration-300 rotate-hover">
+                            TM
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-semibold text-slate-900">Tunde M.</div>
+                            <a href="https://instagram.com/tunde_m" target="_blank" rel="noopener noreferrer"
+                                class="text-xs text-emerald-600 hover:text-emerald-700 flex items-center gap-1 transition">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                                </svg>
+                                @tunde_m
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex gap-1 mb-3">
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">"Came here on a friend's recommendation and now
+                        I'm a regular! The burst fade mohawk is fire 🔥 Ogee is the real deal."</p>
+                </div>
+
+                <!-- Review 5 - NEW -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 reveal hover-lift group">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform duration-300 rotate-hover">
+                            KE
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-semibold text-slate-900">Kelechi E.</div>
+                            <a href="https://instagram.com/kelechi_e" target="_blank" rel="noopener noreferrer"
+                                class="text-xs text-emerald-600 hover:text-emerald-700 flex items-center gap-1 transition">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                                </svg>
+                                @kelechi_e
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex gap-1 mb-3">
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">"Exceptional beard grooming! Ogee transformed my
+                        look completely. The precision and artistry is unmatched. Highly recommend!"</p>
                 </div>
             </div>
         </div>
     </section>
+    
+  
+        
+   
+  
 
     <!-- Footer -->
     <footer class="py-12 px-4 sm:px-6 bg-slate-900 text-white">
@@ -677,7 +1385,8 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                 <div>
                     <div class="text-2xl font-bold text-emerald-500 mb-4">Ogee Barbershop</div>
-                    <p class="text-slate-400">Premium barbershop services in Lagos. Where fresh cuts meet modern style.</p>
+                    <p class="text-slate-400">Premium barbershop services in Lagos. Where fresh cuts meet modern style.
+                    </p>
                 </div>
                 <div>
                     <h3 class="font-semibold mb-4">Quick Links</h3>
@@ -704,10 +1413,12 @@
     </footer>
 
     <!-- Lightbox / Image Modal -->
-    <div id="lightbox" class="fixed inset-0 hidden items-center justify-center z-50" role="dialog" aria-modal="true" aria-hidden="true">
+    <div id="lightbox" class="fixed inset-0 hidden items-center justify-center z-50" role="dialog" aria-modal="true"
+        aria-hidden="true">
         <div class="absolute inset-0 lightbox-overlay" data-close></div>
         <div class="relative max-w-3xl mx-auto p-4">
-            <button id="lightboxClose" aria-label="Close image" class="absolute -top-2 -right-2 bg-white rounded-full p-2 shadow-lg">✕</button>
+            <button id="lightboxClose" aria-label="Close image"
+                class="absolute -top-2 -right-2 bg-white rounded-full p-2 shadow-lg">✕</button>
             <img id="lightboxImg" src="" alt="" class="rounded-xl max-h-[80vh] w-auto block mx-auto" />
             <div id="lightboxCaption" class="text-center text-white mt-4"></div>
         </div>
@@ -756,7 +1467,7 @@
             // Move focus for accessibility
             resultEl.querySelector('button')?.focus();
         }
-        
+
         function resetQuiz() {
             document.getElementById('quizContainer').classList.remove('hidden');
             const resultEl = document.getElementById('quizResult');
@@ -766,7 +1477,7 @@
 
         // Scroll to booking
         function scrollToBooking() {
-            document.getElementById('booking').scrollIntoView({behavior: 'smooth'});
+            document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
         }
 
         // Smooth scroll for all navigation links
@@ -874,6 +1585,108 @@
                 });
             });
         })();
+
+        // Parallax Scrolling Effect
+        (function () {
+            let ticking = false;
+
+            function updateParallax() {
+                const scrolled = window.pageYOffset;
+                const parallaxElements = document.querySelectorAll('.parallax');
+
+                parallaxElements.forEach((el, index) => {
+                    const speed = 0.5 + (index * 0.1); // Different speeds for depth
+                    const yPos = -(scrolled * speed / 10);
+                    el.style.transform = `translateY(${yPos}px)`;
+                });
+
+                ticking = false;
+            }
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(updateParallax);
+                    ticking = true;
+                }
+            });
+        })();
+
+        // Magnetic Button Effect
+        (function () {
+            const magneticButtons = document.querySelectorAll('.magnetic-btn');
+
+            magneticButtons.forEach(btn => {
+                btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+
+                    // Limit the movement to a reasonable range
+                    const moveX = x * 0.15;
+                    const moveY = y * 0.15;
+
+                    btn.style.transform = `translate(${moveX}px, ${moveY}px) translateY(-2px)`;
+                });
+
+                btn.addEventListener('mouseleave', () => {
+                    btn.style.transform = '';
+                });
+            });
+        })();
+
+        // Enhanced 3D Card Tilt Effect
+        (function () {
+            const cards = document.querySelectorAll('.card-3d');
+
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateX = (y - centerY) / 10;
+                    const rotateY = (centerX - x) / 10;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = '';
+                });
+            });
+        })();
+
+        // Smooth Scroll Performance Enhancement
+        (function () {
+            // Add smooth scrolling behavior to all anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href === '#') return;
+
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        })();
+
+        // Add entrance animations on page load
+        (function () {
+            window.addEventListener('load', () => {
+                // Trigger any initial animations
+                document.body.style.opacity = '1';
+            });
+        })();
     </script>
 </body>
+
 </html>
